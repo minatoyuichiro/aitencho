@@ -4,6 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AI店長：3部制シフト最適化デモ</title>
+
+    <meta property="og:title" content="AI店長：量子技術で爆速シフト作成デモ">
+    <meta property="og:description" content="午前・午後・夜間の複雑な条件を、量子アニーリングアルゴリズムで瞬時に解決します。">
+    <meta property="og:url" content="https://minatoyuichiro.github.io/aitencho/">
+    <meta property="og:image" content="https://minatoyuichiro.github.io/aitencho/icon.png"> <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary_large_image">
+
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         .slot-selected { background-color: #3b82f6; color: white; border-color: #2563eb; }
@@ -18,25 +25,38 @@
     <div class="max-w-5xl mx-auto bg-white rounded-2xl shadow-2xl overflow-hidden">
         <div class="bg-gradient-to-r from-indigo-600 to-blue-500 p-6 text-white text-center">
             <h1 class="text-3xl font-extrabold tracking-tight">AI店長：3部制シフト最適化</h1>
-            <p class="text-blue-100 mt-2">「午前・午後・夜間」の複雑な条件を量子アルゴリズムで解決</p>
+            <p class="text-blue-100 mt-2">量子アニーリングで「働きやすさ」を数式化して解く</p>
         </div>
 
         <div class="p-6">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8 text-sm">
                 <div class="bg-amber-50 p-4 rounded-xl border border-amber-200">
-                    <h2 class="font-bold text-amber-800 mb-2 flex items-center">📌 基本ルール</h2>
-                    <ul class="text-sm text-amber-700 space-y-1">
-                        <li>1スロット(午前/午後/夜)につき、必ず<strong>1人</strong>配置。</li>
-                        <li>スタッフの「出勤可能（青いマス）」を優先します。</li>
+                    <h2 class="font-bold text-amber-800 mb-2">📌 絶対守るルール</h2>
+                    <ul class="text-amber-700 list-disc list-inside">
+                        <li>1枠に必ず誰か1人を配置する</li>
+                        <li>出勤NG（白いマス）には極力入れない</li>
                     </ul>
                 </div>
                 <div class="bg-rose-50 p-4 rounded-xl border border-rose-200">
-                    <h2 class="font-bold text-rose-800 mb-2 flex items-center">⚖️ 追加された「こだわり」制約</h2>
-                    <ul class="text-sm text-rose-700 space-y-1">
-                        <li><strong>長時間労働防止:</strong> 同じ人が1日に3回入るのは禁止。</li>
-                        <li><strong>夜勤明け配慮:</strong> 夜間に働いた人は、翌朝は休み。</li>
-                        <li><strong>均等割り当て:</strong> 特定の人に仕事が偏らないように調整。</li>
+                    <h2 class="font-bold text-rose-800 mb-2">⚖️ AI店長の「こだわり」</h2>
+                    <ul class="text-rose-700 list-disc list-inside">
+                        <li>3連勤（1日中勤務）を避ける</li>
+                        <li>夜勤明けの翌朝は休ませる</li>
+                        <li>特定の人に仕事を偏らせない</li>
                     </ul>
+                </div>
+            </div>
+
+            <div class="mb-8 bg-slate-50 p-6 rounded-xl border border-slate-200 shadow-inner">
+                <label class="block text-slate-700 font-bold mb-4 flex justify-between">
+                    <span>AI店長のこだわり度（制約の強さ）</span>
+                    <span id="strictness-val" class="text-indigo-600 font-mono text-xl">1.0</span>
+                </label>
+                <input type="range" id="strictness" min="0.1" max="2.0" step="0.1" value="1.0" class="w-full h-3 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-indigo-600">
+                <div class="flex justify-between text-xs text-slate-400 mt-2">
+                    <span>希望を最優先（ルールゆるめ）</span>
+                    <span>バランス重視</span>
+                    <span>ルールを厳守（希望より健康）</span>
                 </div>
             </div>
 
@@ -65,15 +85,15 @@
             </div>
 
             <div class="text-center space-y-4">
-                <button id="solve-btn" class="bg-indigo-600 hover:bg-indigo-700 text-white font-black py-4 px-12 rounded-full transition-all shadow-xl transform hover:scale-105 active:scale-95 text-lg">
-                    最適なシフトを生成する
+                <button id="solve-btn" class="bg-indigo-600 hover:bg-indigo-700 text-white font-black py-4 px-12 rounded-full transition-all shadow-xl transform hover:scale-105 active:scale-95 text-xl">
+                    シフトを最適化する
                 </button>
                 <div id="status" class="text-sm font-mono text-indigo-500 font-bold h-6 italic"></div>
             </div>
 
-            <div id="result-area" class="mt-12 hidden border-t-4 border-emerald-500 pt-8">
-                <h2 class="text-2xl font-black text-gray-800 mb-6 text-center">✨ AI店長が出した最適解</h2>
-                <div class="overflow-x-auto rounded-xl border-2 border-emerald-100">
+            <div id="result-area" class="mt-12 hidden border-t-4 border-emerald-500 pt-8 animate-in fade-in duration-700">
+                <h2 class="text-2xl font-black text-gray-800 mb-6 text-center italic">"Quantum Optimized Schedule"</h2>
+                <div class="overflow-x-auto rounded-xl border-2 border-emerald-100 shadow-lg">
                     <table class="w-full text-center border-collapse">
                         <thead id="result-head" class="bg-emerald-50 text-emerald-900 text-sm"></thead>
                         <tbody id="result-grid"></tbody>
@@ -84,7 +104,7 @@
     </div>
 
     <script>
-        // --- Bqubo クラス ---
+        // --- Bqubo クラス (変更なし) ---
         class Bqubo {
             constructor(qubo, params = {}) {
                 this.qubo = qubo;
@@ -162,16 +182,19 @@
             }
         }
 
-        // --- 設定 ---
         const staffs = ["辰巳くん", "門間さん", "湊さん", "新人A"];
         const days = ["月", "火", "水", "木", "金"];
         const slots = ["午前", "午後", "夜間"];
-        const totalSlots = days.length * slots.length; // 15
+        const totalSlots = days.length * slots.length;
         let wishlist = Array(staffs.length).fill().map(() => Array(totalSlots).fill(1));
 
-        // 初期化
         function init() {
             const grid = document.getElementById('input-grid');
+            const slider = document.getElementById('strictness');
+            const sliderVal = document.getElementById('strictness-val');
+
+            slider.oninput = () => { sliderVal.innerText = slider.value; };
+
             staffs.forEach((staff, sIdx) => {
                 const tr = document.createElement('tr');
                 tr.innerHTML = `<td class="p-3 border-r font-bold bg-slate-50 text-sm">${staff}</td>`;
@@ -190,13 +213,15 @@
         }
 
         async function solve() {
-            document.getElementById('solve-btn').disabled = true;
-            const qubo = {};
-            const P = 20.0; // 強制制約の重み
+            const btn = document.getElementById('solve-btn');
+            const strictness = parseFloat(document.getElementById('strictness').value);
+            btn.disabled = true;
             
-            // 変数インデックス: s * totalSlots + i
-
-            // 1. 各スロットに1人 (Σ x_si = 1)
+            const qubo = {};
+            const P = 20.0; // 絶対制約（1枠1人）
+            const W = 5.0 * strictness; // 「こだわり」制約の重み
+            
+            // 1. 各スロットに必ず1人
             for (let i = 0; i < totalSlots; i++) {
                 for (let s1 = 0; s1 < staffs.length; s1++) {
                     const idx1 = s1 * totalSlots + i;
@@ -208,35 +233,34 @@
                 }
             }
 
-            // 2. 1日3連勤（午前・午後・夜間すべて）を禁止
+            // 2. 1日3連勤の回避
             for (let s = 0; s < staffs.length; s++) {
                 for (let d = 0; d < days.length; d++) {
-                    const m = s * totalSlots + d * 3;     // 午前
-                    const a = s * totalSlots + d * 3 + 1; // 午後
-                    const n = s * totalSlots + d * 3 + 2; // 夜間
-                    // 3つ選ばれるとペナルティ
-                    qubo[`${m},${a}`] = (qubo[`${m},${a}`] || 0) + P/2;
-                    qubo[`${a},${n}`] = (qubo[`${a},${n}`] || 0) + P/2;
-                    qubo[`${m},${n}`] = (qubo[`${m},${n}`] || 0) + P/2;
+                    const m = s * totalSlots + d * 3;
+                    const a = s * totalSlots + d * 3 + 1;
+                    const n = s * totalSlots + d * 3 + 2;
+                    qubo[`${m},${a}`] = (qubo[`${m},${a}`] || 0) + W;
+                    qubo[`${a},${n}`] = (qubo[`${a},${n}`] || 0) + W;
+                    qubo[`${m},${n}`] = (qubo[`${m},${n}`] || 0) + W;
                 }
             }
 
-            // 3. 夜勤明けの午前出勤を禁止 (夜勤d と 午前d+1)
+            // 3. 夜勤明け午前の回避
             for (let s = 0; s < staffs.length; s++) {
                 for (let d = 0; d < days.length - 1; d++) {
                     const night = s * totalSlots + d * 3 + 2;
                     const nextMorning = s * totalSlots + (d + 1) * 3;
-                    qubo[`${night},${nextMorning}`] = (qubo[`${night},${nextMorning}`] || 0) + P;
+                    qubo[`${night},${nextMorning}`] = (qubo[`${night},${nextMorning}`] || 0) + W * 2;
                 }
             }
 
-            // 4. 均等化（各スタッフの合計勤務数を近づける）
+            // 4. 均等化
             for (let s = 0; s < staffs.length; s++) {
                 for (let i = 0; i < totalSlots; i++) {
                     const idx1 = s * totalSlots + i;
                     for (let j = i + 1; j < totalSlots; j++) {
                         const idx2 = s * totalSlots + j;
-                        qubo[`${idx1},${idx2}`] = (qubo[`${idx1},${idx2}`] || 0) + 0.5; // ゆるい相互排他
+                        qubo[`${idx1},${idx2}`] = (qubo[`${idx1},${idx2}`] || 0) + 1.0;
                     }
                 }
             }
@@ -245,18 +269,18 @@
             for (let s = 0; s < staffs.length; s++) {
                 for (let i = 0; i < totalSlots; i++) {
                     const idx = s * totalSlots + i;
-                    if (wishlist[s][i] === 0) qubo[idx] = (qubo[idx] || 0) + P; // 不可の日にいれると大ペナルティ
+                    if (wishlist[s][i] === 0) qubo[idx] = (qubo[idx] || 0) + P; 
                 }
             }
 
             const solver = new Bqubo(qubo);
             const result = await solver.solve((_, kT) => {
-                document.getElementById('status').innerText = `量子アニーリング実行中... 温度: ${kT.toFixed(3)}`;
+                document.getElementById('status').innerText = ` annealing... T=${kT.toFixed(3)}`;
             });
 
-            document.getElementById('status').innerText = "最適解が見つかりました！";
+            document.getElementById('status').innerText = "DONE!";
             renderResult(result);
-            document.getElementById('solve-btn').disabled = false;
+            btn.disabled = false;
         }
 
         function renderResult(result) {
@@ -265,21 +289,17 @@
             const body = document.getElementById('result-grid');
             area.classList.remove('hidden');
             body.innerHTML = "";
-            
-            // ヘッダー作成
             let headHtml = `<tr><th class="p-3 border-r">スタッフ</th>`;
             days.forEach(d => headHtml += `<th colspan="3" class="p-3 border-r border-b">${d}曜</th>`);
             head.innerHTML = headHtml + `</tr>`;
-
-            // ボディ作成
             staffs.forEach((staff, sIdx) => {
                 const tr = document.createElement('tr');
                 tr.innerHTML = `<td class="p-3 border-r font-bold text-sm bg-slate-50">${staff}</td>`;
                 for (let i = 0; i < totalSlots; i++) {
                     const isWork = result[sIdx * totalSlots + i] === 1;
                     const td = document.createElement('td');
-                    td.className = `p-2 border text-[10px] ${isWork ? 'slot-result-1 font-bold' : 'text-gray-300'}`;
-                    td.innerText = isWork ? "出勤" : "-";
+                    td.className = `p-2 border text-[10px] ${isWork ? 'slot-result-1 font-bold' : 'text-gray-200'}`;
+                    td.innerText = isWork ? "◯" : "-";
                     tr.appendChild(td);
                 }
                 body.appendChild(tr);
